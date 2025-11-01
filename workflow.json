@@ -1,0 +1,25 @@
+{
+  "active": true,
+  "category": "business",
+  "description": "AI-powered customer profiler that predicts ideal customer personas",
+  "id": "customer_profiler",
+  "name": "Customer Profiler",
+  "long_description": "Generates detailed customer profiles (personas) based on your business idea using AI.\n\nHow to use:\n- Describe your business idea\n- Get 3 detailed customer personas\n- Includes demographics, pain points, motivations, and preferred channels\n\nPerfect for:\n- Market research\n- Marketing strategy\n- Product development\n- Business planning",
+  "short_description": "Generate detailed customer personas from your business idea using AI",
+  "nodes": [
+    {
+      "id": "profiler_agent",
+      "name": "Customer Profiler Agent",
+      "parameters": {
+        "input": "{{ $.raw_user_message }}"
+      },
+      "position": [400, 200],
+      "type": "a2a/mastra-a2a-node",
+      "typeVersion": 1,
+      "url": "http://localhost:8080/a2a/profiler"
+    }
+  ],
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
