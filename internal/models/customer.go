@@ -1,5 +1,6 @@
 package models
 
+// CustomerProfile represents a detailed customer persona
 type CustomerProfile struct {
 	Age               int      `json:"age"`
 	Gender            string   `json:"gender"`
@@ -11,4 +12,13 @@ type CustomerProfile struct {
 	PainPoints        []string `json:"pain_points"`
 	BuyingBehaviors   []string `json:"buying_behaviors"`
 	PreferredChannels []string `json:"preferred_channels"`
+}
+
+// ProfileResponse contains mulriple customer profiles related to a given business idea
+
+type ProfileResponse struct {
+	BusinessIdea string            `json:"business_idea"`
+	Profiles     []CustomerProfile `json:"profiles"`
+	Summary      string            `json:"summary"`
+	Keywords     []string          `json:"keywords"`
 }
