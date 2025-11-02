@@ -238,16 +238,45 @@ func (h *A2AHandler) extractBusinessIdea(msg A2AMessage) string {
 
 	for _, part := range msg.Parts {
 		// Handle direct text parts
-		if part.Kind == "text" && part.Text != nil && *part.Text != "" {
-			texts = append(texts, *part.Text)
+		if part.Kind == "text" && part.Text != nil {
+			// Since Text is interface{}, we need to type assert to string
+			if textStr, ok := part.Text.(string); ok && textStr != "" {
+				texts = append(texts, textStr)
+			}
 		}
 
 		// Handle data parts containing conversation history
 		if part.Kind == "data" && part.Data != nil {
 			var dataArray []map[string]interface{}
-			if err := json.Unmarshal(part.Data, &dataArray); err != nil {
-				log.Printf("WARN: Failed to unmarshal data part: %v", err)
-				continue
+			var dataBytes []byte
+			var err error
+
+			// part.Data could be json.RawMessage, []byte, or already unmarshaled
+			switch v := part.Data.(type) {
+			case json.RawMessage:
+				dataBytes = v
+			case []byte:
+				dataBytes = v
+			case string:
+				dataBytes = []byte(v)
+			case []map[string]interface{}:
+				// Already unmarshaled
+				dataArray = v
+			default:
+				// Try to marshal and unmarshal
+				dataBytes, err = json.Marshal(v)
+				if err != nil {
+					log.Printf("WARN: Failed to marshal data part: %v", err)
+					continue
+				}
+			}
+
+			// If we have bytes, unmarshal them
+			if len(dataBytes) > 0 {
+				if err := json.Unmarshal(dataBytes, &dataArray); err != nil {
+					log.Printf("WARN: Failed to unmarshal data part: %v", err)
+					continue
+				}
 			}
 
 			// Extract text from the last message in the data array (most recent user message)
@@ -292,8 +321,7 @@ func (h *A2AHandler) createSuccessTaskResult(taskID string, profileResp *models.
 
 	// Create data artifact with the full profile
 	profileData := map[string]interface{}{
-		"businessIdea": profileResp.BusinessIdea,
-		"profiles":     profileResp.Profiles,
+		"profiles": profileResp.Profiles,
 	}
 
 	artifactID := uuid.New().String()
@@ -305,7 +333,7 @@ func (h *A2AHandler) createSuccessTaskResult(taskID string, profileResp *models.
 			State:     StateCompleted,
 			Timestamp: Timestamp(),
 			Message: &A2AMessage{
-				Kind: "message",
+				Kind: "text",
 				Role: RoleAgent,
 				Parts: []MessagePart{
 					TextPart(responseText),
@@ -332,7 +360,7 @@ func (h *A2AHandler) createErrorTaskResult(taskID string, errorMsg string) TaskR
 			State:     StateFailed,
 			Timestamp: Timestamp(),
 			Message: &A2AMessage{
-				Kind: "message",
+				Kind: "text",
 				Role: RoleAgent,
 				Parts: []MessagePart{
 					TextPart(errorMsg),

@@ -35,9 +35,9 @@ type A2AMessage struct {
 }
 
 type MessagePart struct {
-	Kind string          `json:"kind"`
-	Text *string         `json:"text,omitempty"`
-	Data json.RawMessage `json:"data,omitempty"`
+	Kind string      `json:"kind"`
+	Text interface{} `json:"text,omitempty"`
+	Data interface{} `json:"data,omitempty"`
 }
 
 type MessageConfiguration struct {
@@ -79,8 +79,8 @@ func TextPart(text string) MessagePart {
 func DataPart(data map[string]interface{}) MessagePart {
 	dataBytes, _ := json.Marshal(data)
 	return MessagePart{
-		Kind: "data",
-		Data: dataBytes,
+		Kind: "text",
+		Text: string(dataBytes),
 	}
 }
 
