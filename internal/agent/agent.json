@@ -1,18 +1,19 @@
 {
-  "id": "https://domain.com/agents/customer-profiler",
-  "version": "1.1.0",
+  "protocol": "1.0",
   "name": "Customer Profiler",
   "description": "An intelligent agent that analyzes a business idea and predicts an ideal customer profile, including demographics, psychographics, and market fit insights.",
-  "capabilities": {
-    "streaming": false,
-    "interactive": true,
-    "stateful": true,
-    "nlp_analysis": true,
-    "persona_generation": true
-  },
-  "endpoints": {
-    "a2a": "https://yourdomain.com/a2a/profiler",
-    "docs": "https://yourdomain.com/docs"
+  "id": "https://overparticular-lissette-myographic.ngrok-free.dev",
+  "version": "1.1.0",
+  "schema_version": "1.0",
+  "channels": {
+    "a2a": {
+      "url": "https://overparticular-lissette-myographic.ngrok-free.dev/a2a/profiler",
+      "supported_methods": ["message/send"],
+      "formats": ["jsonrpc-2.0"],
+      "capabilities": {
+        "streaming": false
+      }
+    }
   },
   "metadata": {
     "category": "business_intelligence",
@@ -30,17 +31,8 @@
     "icon": "📊",
     "language": "en"
   },
-  "api": {
-    "type": "gemini",
-    "url": "https://yourdomain.com/api",
-    "spec_url": "https://yourdomain.com/openapi.yaml"
-  },
   "auth": {
     "type": "none"
-  },
-  "contact": {
-    "email": "contact@yourdomain.com",
-    "website": "https://yourdomain.com"
   },
   "examples": [
     {
@@ -51,8 +43,12 @@
         "location": "Urban and peri-urban areas",
         "occupation": "Professional/creative",
         "income": "$60k-150k",
-        "pain_points": ["difficulty finding unique/ethical coffee"],
-        "interests": ["food and drinks"],
+        "pain_points": [
+          "difficulty finding unique/ethical coffee"
+        ],
+        "interests": [
+          "food and drinks"
+        ],
         "preferred_channel": "Instagram"
       }
     }

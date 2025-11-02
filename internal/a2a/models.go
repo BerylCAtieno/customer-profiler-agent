@@ -1,6 +1,9 @@
 package a2a
 
-import "time"
+import (
+	"encoding/json"
+	"time"
+)
 
 // JSON-RPC types
 type JSONRPCRequest struct {
@@ -32,9 +35,9 @@ type A2AMessage struct {
 }
 
 type MessagePart struct {
-	Kind string                 `json:"kind"`
-	Text *string                `json:"text,omitempty"`
-	Data map[string]interface{} `json:"data,omitempty"`
+	Kind string          `json:"kind"`
+	Text *string         `json:"text,omitempty"`
+	Data json.RawMessage `json:"data,omitempty"`
 }
 
 type MessageConfiguration struct {
@@ -74,9 +77,10 @@ func TextPart(text string) MessagePart {
 }
 
 func DataPart(data map[string]interface{}) MessagePart {
+	dataBytes, _ := json.Marshal(data)
 	return MessagePart{
 		Kind: "data",
-		Data: data,
+		Data: dataBytes,
 	}
 }
 
