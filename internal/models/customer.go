@@ -2,7 +2,7 @@ package models
 
 // CustomerProfile represents a detailed customer persona
 type CustomerProfile struct {
-	Age               int      `json:"age"`
+	Age               string   `json:"age"`
 	Gender            string   `json:"gender"`
 	Location          string   `json:"location"`
 	Occupation        string   `json:"occupation"`
