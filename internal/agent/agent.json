@@ -1,0 +1,60 @@
+{
+  "id": "https://domain.com/agents/customer-profiler",
+  "version": "1.1.0",
+  "name": "Customer Profiler",
+  "description": "An intelligent agent that analyzes a business idea and predicts an ideal customer profile, including demographics, psychographics, and market fit insights.",
+  "capabilities": {
+    "streaming": false,
+    "interactive": true,
+    "stateful": true,
+    "nlp_analysis": true,
+    "persona_generation": true
+  },
+  "endpoints": {
+    "a2a": "https://yourdomain.com/a2a/profiler",
+    "docs": "https://yourdomain.com/docs"
+  },
+  "metadata": {
+    "category": "business_intelligence",
+    "tags": [
+      "customer profiling",
+      "market analysis",
+      "business ideas",
+      "entrepreneurship",
+      "AI insights"
+    ],
+    "author": "Beryl Atieno",
+    "organization": "Independent Developer",
+    "created_at": "2025-11-02T00:00:00Z",
+    "updated_at": "2025-11-02T00:00:00Z",
+    "icon": "📊",
+    "language": "en"
+  },
+  "api": {
+    "type": "gemini",
+    "url": "https://yourdomain.com/api",
+    "spec_url": "https://yourdomain.com/openapi.yaml"
+  },
+  "auth": {
+    "type": "none"
+  },
+  "contact": {
+    "email": "contact@yourdomain.com",
+    "website": "https://yourdomain.com"
+  },
+  "examples": [
+    {
+      "input": "A subscription box service for high-quality, sustainable coffee beans sourced from small farms.",
+      "output": {
+        "age": "28–45",
+        "gender": "any",
+        "location": "Urban and peri-urban areas",
+        "occupation": "Professional/creative",
+        "income": "$60k-150k",
+        "pain_points": ["difficulty finding unique/ethical coffee"],
+        "interests": ["food and drinks"],
+        "preferred_channel": "Instagram"
+      }
+    }
+  ]
+}
