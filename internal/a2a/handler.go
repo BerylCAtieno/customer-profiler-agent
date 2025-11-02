@@ -333,7 +333,7 @@ func (h *A2AHandler) createSuccessTaskResult(taskID string, profileResp *models.
 			State:     StateCompleted,
 			Timestamp: Timestamp(),
 			Message: &A2AMessage{
-				Kind: "text",
+				Kind: "message",
 				Role: RoleAgent,
 				Parts: []MessagePart{
 					TextPart(responseText),
