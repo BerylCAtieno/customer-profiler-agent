@@ -31,7 +31,7 @@ type A2AMessage struct {
 	Role      string        `json:"role"`
 	Parts     []MessagePart `json:"parts"`
 	MessageID string        `json:"messageId,omitempty"`
-	TaskID    *string       `json:"taskId,omitempty"`
+	TaskID    string        `json:"taskId,omitempty"`
 }
 
 type MessagePart struct {

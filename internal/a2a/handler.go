@@ -319,12 +319,8 @@ func (h *A2AHandler) createSuccessTaskResult(taskID string, profileResp *models.
 	// Format the profile data nicely
 	responseText := h.formatProfileResponse(profileResp)
 
-	// Create data artifact with the full profile
-	profileData := map[string]interface{}{
-		"profiles": profileResp.Profiles,
-	}
-
 	artifactID := uuid.New().String()
+	messageID := uuid.New().String()
 
 	return TaskResult{
 		ID:   taskID,
@@ -333,8 +329,10 @@ func (h *A2AHandler) createSuccessTaskResult(taskID string, profileResp *models.
 			State:     StateCompleted,
 			Timestamp: Timestamp(),
 			Message: &A2AMessage{
-				Kind: "message",
-				Role: RoleAgent,
+				Kind:      "message",
+				Role:      RoleAgent,
+				MessageID: messageID,
+				TaskID:    taskID,
 				Parts: []MessagePart{
 					TextPart(responseText),
 				},
@@ -345,7 +343,7 @@ func (h *A2AHandler) createSuccessTaskResult(taskID string, profileResp *models.
 				ArtifactID: artifactID,
 				Name:       "Customer Profile Data",
 				Parts: []MessagePart{
-					DataPart(profileData),
+					TextPart(responseText),
 				},
 			},
 		},
@@ -388,34 +386,31 @@ func (h *A2AHandler) formatProfileResponse(profileResp *models.ProfileResponse) 
 		builder.WriteString(fmt.Sprintf("- Gender: %s\n", profile.Gender))
 		builder.WriteString(fmt.Sprintf("- Location: %s\n", profile.Location))
 		builder.WriteString(fmt.Sprintf("- Occupation: %s\n", profile.Occupation))
-		builder.WriteString(fmt.Sprintf("- Income: %s\n\n", profile.Income))
+		builder.WriteString(fmt.Sprintf("- Income: %s\n", profile.Income))
 
 		if len(profile.PainPoints) > 0 {
-			builder.WriteString("**Pain Points:**\n")
+			builder.WriteString("\n**Pain Points:**\n") // Single \n before section
 			for _, pp := range profile.PainPoints {
 				builder.WriteString(fmt.Sprintf("- %s\n", strings.TrimSpace(pp)))
 			}
-			builder.WriteString("\n")
 		}
 
 		if len(profile.Motivations) > 0 {
-			builder.WriteString("**Motivations:**\n")
+			builder.WriteString("\n**Motivations:**\n") // Single \n before section
 			for _, m := range profile.Motivations {
 				builder.WriteString(fmt.Sprintf("- %s\n", strings.TrimSpace(m)))
 			}
-			builder.WriteString("\n")
 		}
 
 		if len(profile.Interests) > 0 {
-			builder.WriteString("**Interests:**\n")
+			builder.WriteString("\n**Interests:**\n") // Single \n before section
 			for _, interest := range profile.Interests {
 				builder.WriteString(fmt.Sprintf("- %s\n", strings.TrimSpace(interest)))
 			}
-			builder.WriteString("\n")
 		}
 
 		if len(profile.PreferredChannels) > 0 {
-			builder.WriteString("**Preferred Channels:**\n")
+			builder.WriteString("\n**Preferred Channels:**\n") // Single \n before section
 			for _, channel := range profile.PreferredChannels {
 				builder.WriteString(fmt.Sprintf("- %s\n", strings.TrimSpace(channel)))
 			}
