@@ -7,13 +7,9 @@ import (
 	"github.com/BerylCAtieno/customer-profiler-agent/internal/a2a"
 	"github.com/BerylCAtieno/customer-profiler-agent/internal/profiler"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 )
 
 func main() {
-	if err := godotenv.Load(".env"); err != nil {
-		log.Fatalf("Failed to load .env file: %v", err)
-	}
 
 	// Get API key from environment
 	apiKey := os.Getenv("GEMINI_API_KEY")
