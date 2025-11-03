@@ -321,10 +321,12 @@ func (h *A2AHandler) createSuccessTaskResult(taskID string, profileResp *models.
 
 	artifactID := uuid.New().String()
 	messageID := uuid.New().String()
+	contextID := uuid.New().String()
 
 	return TaskResult{
-		ID:   taskID,
-		Kind: "task",
+		ID:        taskID,
+		ContextID: contextID,
+		Kind:      "task",
 		Status: TaskStatus{
 			State:     StateCompleted,
 			Timestamp: Timestamp(),

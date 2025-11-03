@@ -49,7 +49,7 @@ type MessageConfiguration struct {
 // Task types
 type TaskResult struct {
 	ID        string       `json:"id"`
-	ContextID string       `json:"contextId,omitempty"`
+	ContextID string       `json:"contextId"`
 	Status    TaskStatus   `json:"status"`
 	Artifacts []Artifact   `json:"artifacts,omitempty"`
 	History   []A2AMessage `json:"history,omitempty"`
