@@ -17,7 +17,7 @@
       "position": [400, 200],
       "type": "a2a/generic-a2a-node",
       "typeVersion": 1,
-      "url": "https://profiler-agent-production.up.railway.app/a2a/profiler"
+      "url": "https://customer-profiler-agent-production.up.railway.app/a2a/profiler"
     }
   ],
   "settings": {

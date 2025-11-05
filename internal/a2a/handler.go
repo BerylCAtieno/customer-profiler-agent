@@ -239,7 +239,6 @@ func (h *A2AHandler) extractBusinessIdea(msg A2AMessage) string {
 	for _, part := range msg.Parts {
 		// Handle direct text parts
 		if part.Kind == "text" && part.Text != nil {
-			// Since Text is interface{}, we need to type assert to string
 			if textStr, ok := part.Text.(string); ok && textStr != "" {
 				texts = append(texts, textStr)
 			}
@@ -251,7 +250,6 @@ func (h *A2AHandler) extractBusinessIdea(msg A2AMessage) string {
 			var dataBytes []byte
 			var err error
 
-			// part.Data could be json.RawMessage, []byte, or already unmarshaled
 			switch v := part.Data.(type) {
 			case json.RawMessage:
 				dataBytes = v
@@ -260,10 +258,8 @@ func (h *A2AHandler) extractBusinessIdea(msg A2AMessage) string {
 			case string:
 				dataBytes = []byte(v)
 			case []map[string]interface{}:
-				// Already unmarshaled
 				dataArray = v
 			default:
-				// Try to marshal and unmarshal
 				dataBytes, err = json.Marshal(v)
 				if err != nil {
 					log.Printf("WARN: Failed to marshal data part: %v", err)
@@ -279,8 +275,6 @@ func (h *A2AHandler) extractBusinessIdea(msg A2AMessage) string {
 				}
 			}
 
-			// Extract text from the last message in the data array (most recent user message)
-			// Look for user messages that look like requests (not system responses)
 			for i := len(dataArray) - 1; i >= 0; i-- {
 				item := dataArray[i]
 				if kind, ok := item["kind"].(string); ok && kind == "text" {
@@ -299,10 +293,9 @@ func (h *A2AHandler) extractBusinessIdea(msg A2AMessage) string {
 							continue
 						}
 
-						// This looks like a user request
 						if cleanText != "" {
 							texts = append(texts, cleanText)
-							break // Use the most recent valid user message
+							break
 						}
 					}
 				}
@@ -316,7 +309,6 @@ func (h *A2AHandler) extractBusinessIdea(msg A2AMessage) string {
 }
 
 func (h *A2AHandler) createSuccessTaskResult(taskID string, profileResp *models.ProfileResponse) TaskResult {
-	// Format the profile data nicely
 	responseText := h.formatProfileResponse(profileResp)
 
 	artifactID := uuid.New().String()
@@ -391,28 +383,28 @@ func (h *A2AHandler) formatProfileResponse(profileResp *models.ProfileResponse) 
 		builder.WriteString(fmt.Sprintf("- Income: %s\n", profile.Income))
 
 		if len(profile.PainPoints) > 0 {
-			builder.WriteString("\n**Pain Points:**\n") // Single \n before section
+			builder.WriteString("\n**Pain Points:**\n")
 			for _, pp := range profile.PainPoints {
 				builder.WriteString(fmt.Sprintf("- %s\n", strings.TrimSpace(pp)))
 			}
 		}
 
 		if len(profile.Motivations) > 0 {
-			builder.WriteString("\n**Motivations:**\n") // Single \n before section
+			builder.WriteString("\n**Motivations:**\n")
 			for _, m := range profile.Motivations {
 				builder.WriteString(fmt.Sprintf("- %s\n", strings.TrimSpace(m)))
 			}
 		}
 
 		if len(profile.Interests) > 0 {
-			builder.WriteString("\n**Interests:**\n") // Single \n before section
+			builder.WriteString("\n**Interests:**\n")
 			for _, interest := range profile.Interests {
 				builder.WriteString(fmt.Sprintf("- %s\n", strings.TrimSpace(interest)))
 			}
 		}
 
 		if len(profile.PreferredChannels) > 0 {
-			builder.WriteString("\n**Preferred Channels:**\n") // Single \n before section
+			builder.WriteString("\n**Preferred Channels:**\n")
 			for _, channel := range profile.PreferredChannels {
 				builder.WriteString(fmt.Sprintf("- %s\n", strings.TrimSpace(channel)))
 			}
@@ -451,5 +443,5 @@ func (h *A2AHandler) sendErrorResponse(c *gin.Context, id string, message string
 	log.Printf("Code: %d, Message: %s", code, message)
 	log.Printf("==============================================")
 
-	c.JSON(http.StatusOK, response) // JSON-RPC errors are sent with 200 OK
+	c.JSON(http.StatusOK, response)
 }

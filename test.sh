@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Customer Profiler Agent - Test Runner Script
-# This script helps you quickly test your agent endpoints
 
 set -e
 

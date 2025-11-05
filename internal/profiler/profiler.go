@@ -49,36 +49,28 @@ func (g *GeminiClient) GenerateCustomerProfiles(ctx context.Context, businessIde
 		return nil, fmt.Errorf("no content generated")
 	}
 
-	// Extract the single line of text from response
 	text := fmt.Sprintf("%v", resp.Candidates[0].Content.Parts[0])
 
-	// Parse the simple string format
 	profile, err := g.parseSimpleProfile(text)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse simple profile: %w", err)
 	}
 
-	// Wrap the single profile in your ProfileResponse model
 	return &models.ProfileResponse{
 		BusinessIdea: businessIdea,
-		Profiles:     []models.CustomerProfile{*profile}, // Single profile in an array
-		// Summary and Keywords will be empty unless you add them back to the prompt
-		Summary:  "",
-		Keywords: []string{},
+		Profiles:     []models.CustomerProfile{*profile},
+		Summary:      "",
+		Keywords:     []string{},
 	}, nil
 }
 
-// Replace your old parseProfiles function with this
 func (g *GeminiClient) parseSimpleProfile(text string) (*models.CustomerProfile, error) {
 	profile := models.CustomerProfile{}
 
-	// Clean up any extraneous whitespace
 	text = strings.TrimSpace(text)
 
-	// Split the entire string by ", " to get key-value pairs
 	pairs := strings.Split(text, ", ")
 
-	// A simple map to hold the extracted data
 	data := make(map[string]string)
 
 	for _, pair := range pairs {
@@ -90,23 +82,17 @@ func (g *GeminiClient) parseSimpleProfile(text string) (*models.CustomerProfile,
 		}
 	}
 
-	// Map the simple string data to the struct fields
 	profile.Age = data["age"]
 	profile.Gender = data["gender"]
 	profile.Location = data["location"]
 	profile.Occupation = data["occupation"]
 	profile.Income = data["income"]
 
-	// Split comma-separated lists for arrays in your struct
 	profile.PainPoints = strings.Split(data["pain_points"], ",")
 	profile.Motivations = strings.Split(data["motivations"], ",")
 	profile.Interests = strings.Split(data["interests"], ",")
 
-	// Since you only requested a single channel/behavior, map the simple value
 	profile.PreferredChannels = []string{data["channel"]}
-
-	// Note: The 'name' and 'buying_behavior' fields from your original JSON are excluded
-	// to keep the profile very short. If you need them, add them to the new prompt.
 
 	return &profile, nil
 }
